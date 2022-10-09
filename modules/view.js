@@ -8,8 +8,10 @@ export class View {
         this.searchLine = this.createElements('div', 'search-line');
         this.searchInput = this.createElements('input', 'search-input');
         this.searchCounter = this.createElements('span', 'counter');
+        
         this.searchLine.append(this.searchInput);
         this.searchLine.append(this.searchCounter);
+        
 
         this.usersWrapper = this.createElements('div', 'users-wrapper');
         this.usersList = this.createElements('ul', 'users');
@@ -43,7 +45,11 @@ export class View {
         this.usersList.append(userElement);
     }
     toggleReloadMore(show){
-        this.loadMore.style.display = show ? 'block' : 'none'
+        this.loadMore.style.display = show ? 'block' : 'none';
+    }
+
+    setCounterMessage(message){
+        this.searchCounter.textContent = message
     }
 
 }
