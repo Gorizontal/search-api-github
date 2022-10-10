@@ -8,4 +8,17 @@ export class Api {
         return await fetch(`${URL}search/users?q=${value}&per_page=${USER_PER_PAGE}&page=${page}`)
     }
 
+    loadUsersData(login){
+        const urls = [
+            `${URL}users/${login}/following`,
+            `${URL}users/${login}/followers`,
+            `${URL}users/${login}/repos`
+        ];
+
+        const request = urls.map(url => fetch(url));
+
+        return Promise.all(request)
+            .then(res => Promise.all(res.map((r)=> {return r.json()} )))
+    }
 }
+

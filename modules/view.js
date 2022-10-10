@@ -1,5 +1,7 @@
 export class View {
-    constructor(){
+    constructor(api){
+        this.api = api;
+
         this.app = document.getElementById('app');
 
         this.title = this.createElements('h1', 'title');  
@@ -40,13 +42,59 @@ export class View {
     }
     createUser(userData){
         const userElement = this.createElements('li', 'user-prev')
+        userElement.addEventListener('click', () => {this.showUserData(userData)})
         userElement.innerHTML = `<img class= "user-prev-photo" src="${userData.avatar_url}" alt= "${userData.login}"  >
                                  <span class="user-prev-name">${userData.login}</span>`;
         this.usersList.append(userElement);
     }
+
+    showUserData(userData){
+        
+        const userEL = this.createElements('div', 'user');
+       if(document.querySelector('.user')){document.querySelector('.user').remove()}
+        
+        this.api.loadUsersData(userData.login)
+                    .then(res => {
+                        const [following, followers, repos] = res;
+                        const followingList = this.createDatList(following, 'Following')
+                        const followersList = this.createDatList(followers, 'Followers')
+                        const reposList = this.createDatList(repos, 'Repos')
+                        if(userEL.innerHTML) {userEL.innerHTML = ''}
+                        userEL.innerHTML = `<img src="${userData.avatar_url}" alt= "${userData.login}">
+                        <h2>${userData.login}</h2>
+                        ${followingList}
+                        ${followersList}
+                        ${reposList} `
+                    })
+        this.main.append(userEL);
+    }
+
+    createDatList(list, title){
+        const block = this.createElements('div', 'user-block');
+        const titleTag = this.createElements('h3', 'user-block-title');
+        const listTag = this.createElements('ul', 'user-list');
+        titleTag.textContent = title;
+
+        list.forEach(item => {
+            const el = this.createElements('li', 'user-list-item');
+            el.innerHTML = `<a href="${item.html_url}">${item.login ? item.login : item.name}</a>`
+
+            listTag.append(el)
+        })
+
+        block.append(titleTag);
+        block.append(listTag);
+
+
+        return block.innerHTML;
+
+
+    }
+
     toggleReloadMore(show){
         this.loadMore.style.display = show ? 'block' : 'none';
     }
+
 
     setCounterMessage(message){
         this.searchCounter.textContent = message

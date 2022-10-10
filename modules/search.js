@@ -31,6 +31,8 @@ export class Search {
             this.clearUsers();
             this.usersRequest(this.view.searchInput.value);
         } else {
+            /////
+            document.querySelector('.user').remove()
             this.clearUsers();
             this.view.toggleReloadMore(false);
         }
@@ -48,7 +50,6 @@ export class Search {
         try {
             await this.api.loadUsers(searchValue, this.currentPage).then((res)=>{ 
                 res.json().then((res)=>{
-                    console.log(res)
                     users = res.items;
                     totalCount = res.total_count;
                     message = this.log.counterMessage(totalCount);

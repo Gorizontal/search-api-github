@@ -28,6 +28,11 @@
 	margin: 0 auto;
 }
 
+.user {
+	max-width: 700px;
+	margin-left: 50px;
+}
+
 .users {
 	align-items: flex-start;
 	cursor: pointer;
